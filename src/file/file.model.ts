@@ -9,45 +9,46 @@ export class FileModel extends Model {
         primaryKey: true,
         autoIncrement: true,
         type: DataType.INTEGER,
+        field: 'fil_id'
     })
-    id: number;
+    filId: number;
 
     @Column({
         type: DataType.STRING,
-        field: 'filename',
+        field: 'fil_filename',
     })
-    filename: string;
+    filFilename: string;
 
     @Column({
         type: DataType.DATE,
-        field: 'createdAt',
+        field: 'fil_created_at',
     })
-    created_at: Date;
+    filCreatedAt: Date;
 
     @Column({
         type: DataType.TEXT({ length: 'long' }),
-        field: 'content',
+        field: 'fil_content',
     })
-    content: string;
+    filContent: string;
 
     @Column({
         type: DataType.STRING({ length: 15 }),
         defaultValue: 'pending',
-        field: 'status',
+        field: 'fil_status',
     })
-    status: string;
+    filStatus: string;
 
     @Column({
         type: DataType.DATE,
         defaultValue: null,
-        field: 'activeAt',
+        field: 'fil_active_at',
     })
-    active_at: Date;
+    filActiveAt: Date;
 
     @Column({
         type: DataType.DATE,
         defaultValue: null,
-        field: 'inactiveAt',
+        field: 'fil_inactive_at',
     })
-    inactive_at: Date;
+    filInactiveAt: Date;
 }

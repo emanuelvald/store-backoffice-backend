@@ -42,9 +42,9 @@ export class FileService {
         });
 
         const newFile = this.file.build()
-        newFile.created_at = new Date()
-        newFile.filename = file.originalname
-        newFile.content = contentFileBase64
+        newFile.filCreatedAt = new Date()
+        newFile.filFilename = file.originalname
+        newFile.filContent = contentFileBase64
 
         try {
             await newFile.save({
@@ -55,14 +55,13 @@ export class FileService {
             const nodeId = nmi.machineIdSync()
 
             const process = this.process.build();
-            process.createdAt = new Date();
-            process.transaction = processTransaction || '';
-            process.createdAt = new Date();
-            process.status = ProcessStatus.pending;
-            process.node = nodeId;
-            process.progress = 0.0;
-            process.fileId = newFile.id;
-            process.filename = newFile.filename;
+            process.prcCreatedAt = new Date();
+            process.prcTransaction = processTransaction || '';
+            process.prcStatus = ProcessStatus.pending;
+            process.prcNode = nodeId;
+            process.prcProgress = 0.0;
+            process.prcFilId = newFile.filId;
+            process.prcFilename = newFile.filFilename;
 
             await process.save({
                 transaction: transaction,
@@ -72,7 +71,7 @@ export class FileService {
 
             // Event emitter
             this.emitter.emit('newFile', {
-                processId: process.id,
+                processId: process.prcId,
             });
 
             return {
@@ -107,7 +106,7 @@ export class FileService {
             await process.save();
 
             const file = await this.file.findByPk(process.fileId);
-            const workbook = XLSX.read(file.content, {
+            const workbook = XLSX.read(file.filContent, {
                 type: 'base64',
                 cellDates: true,
                 cellNF: false,
@@ -122,7 +121,6 @@ export class FileService {
             /*const bulk: StudentDTO[] = this.prepareFile(jsonData, process.fileId);
             await this.insertBulk(bulk, process);*/
         } catch (err) {
-            console.error(err);
             if (process) {
                 process.status = ProcessStatus.failed;
                 process.save();

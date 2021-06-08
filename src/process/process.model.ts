@@ -11,64 +11,66 @@ export class ProcessModel extends Model<ProcessModel> {
     @Column({
         primaryKey: true,
         autoIncrement: true,
-        type: DataType.INTEGER
+        type: DataType.INTEGER,
+        field: 'prc_id'
     })
-    id: number;
+    prcId: number;
 
     @Column({
         type: DataType.STRING,
-        field: 'transaction'
+        field: 'prc_transaction'
     })
-    transaction: string;
+    prcTransaction: string;
 
     @Column({
         type: DataType.DATE,
-        field: 'createdAt'
+        field: 'prc_created_at'
     })
-    createdAt: Date;
+    prcCreatedAt: Date;
 
     @Column({
         type: DataType.DATE,
-        field: 'startedAt'
+        field: 'prc_started_at'
     })
-    startedAt: Date;
+    prcStartedAt: Date;
 
     @Column({
         type: DataType.DATE,
-        field: 'completedAt'
+        field: 'prc_completed_at'
     })
-    completedAt: Date;
-    @Column({
-        type: DataType.STRING,
-        field: 'filename'
-    })
-    filename: string;
+    prcCompletedAt: Date;
 
     @Column({
         type: DataType.STRING,
-        field: 'status'
+        field: 'prc_filename'
     })
-    status: ProcessStatusStrings;
+    prcFilename: string;
 
     @Column({
         type: DataType.STRING,
-        field: 'node'
+        field: 'prc_status'
     })
-    node: string;
+    prcStatus: ProcessStatusStrings;
+
+    @Column({
+        type: DataType.STRING,
+        field: 'prc_node'
+    })
+    prcNode: string;
 
     @Column({
         type: DataType.DOUBLE,
-        field: 'progress'
+        field: 'prc_progress'
     })
-    progress: number;
+    prcProgress: number;
 
     @ForeignKey(() => FileModel)
     @Column({
         type: DataType.INTEGER,
-        field: 'file'
+        field: 'fil_id'
     })
-    fileId: number;
+    prcFilId: number;
 
     @BelongsTo(() => FileModel)
-    file: FileModel;
+    filId: FileModel;
 }

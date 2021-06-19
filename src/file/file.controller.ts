@@ -20,7 +20,7 @@ export class FileController {
     }
 
     @Post('upload')
-    @UseInterceptors(FileInterceptor('file', {limits: {fields: 5}}))
+    @UseInterceptors(FileInterceptor('file'))
     uploadFile(@UploadedFile() file: Express.Multer.File) {
         return this.fileParserService.uploadFile(file)
     }

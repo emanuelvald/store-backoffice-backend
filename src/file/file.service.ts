@@ -32,11 +32,11 @@ export class FileService {
     }
 
     async uploadFile(file: Express.Multer.File) {
-        const book: XLSX.WorkBook = XLSX.read(file.buffer, {type: 'buffer'});
+        //const book: XLSX.WorkBook = XLSX.read(file.buffer, {type: 'buffer'});
 
         const contentFileBase64 = Buffer.from(file.buffer).toString('base64')
 
-        const transaction = await this.sequelize.transaction({
+        const trans = await this.sequelize.transaction({
             autocommit: false,
             isolationLevel: ISOLATION_LEVELS.READ_COMMITTED
         });
@@ -48,7 +48,7 @@ export class FileService {
 
         try {
             await newFile.save({
-                transaction: transaction
+                transaction: trans
             })
 
             const processTransaction = this.generateUUID();
@@ -58,16 +58,16 @@ export class FileService {
             process.prcCreatedAt = new Date();
             process.prcTransaction = processTransaction || '';
             process.prcStatus = ProcessStatus.pending;
-            process.prcNode = nodeId;
+            process.prcNode = nodeId || '';
             process.prcProgress = 0.0;
             process.prcFilId = newFile.filId;
             process.prcFilename = newFile.filFilename;
 
             await process.save({
-                transaction: transaction,
+                transaction: trans,
             });
 
-            await transaction.commit();
+            await trans.commit();
 
             // Event emitter
             this.emitter.emit('newFile', {
@@ -75,12 +75,12 @@ export class FileService {
             });
 
             return {
-                message: 'proceso creado exitosamente',
-                transactionId: transaction,
+                message: 'process created successfully',
+                transactionId: processTransaction,
             }
         } catch (err) {
-            console.error(err.message);
-            await transaction.rollback();
+            console.error("errorXXX: ", err);
+            await trans.rollback();
             return false;
         }
     }
